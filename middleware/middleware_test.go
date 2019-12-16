@@ -14,14 +14,11 @@ func TestExpressSessionMiddlwareWithNoCookie(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sid, _ := r.Context().Value(SessionContextKey).(string)
-		w.Write([]byte(sid))
-	})
+	handler := getHandler()
 
-	finalHandler := ExpressSessionMiddleware("risk3sixty", "r3stesting123", func(sessionID string) interface{} {
-		return sessionID
-	}, handler)
+	SetCookieKey("risk3sixty")
+	SetCookieSecret("r3stesting123")
+	finalHandler := ExpressSessionMiddleware(handler)
 	finalHandler.ServeHTTP(rr, reqWithoutCookie)
 
 	// Check the status code is what we expect.
@@ -72,15 +69,20 @@ func validKeyTester(t *testing.T, cookieValue string) *httptest.ResponseRecorder
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sid, _ := r.Context().Value(SessionContextKey).(string)
-		w.Write([]byte(sid))
-	})
+	handler := getHandler()
 
-	finalHandler := ExpressSessionMiddleware("risk3sixty", "r3stesting123", func(sessionID string) interface{} {
-		return sessionID
-	}, handler)
+	SetCookieKey("risk3sixty")
+	SetCookieSecret("r3stesting123")
+	finalHandler := ExpressSessionMiddleware(handler)
 	finalHandler.ServeHTTP(rr, reqWithCookie)
 
 	return rr
+}
+
+func getHandler() http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		session, _ := r.Context().Value(SessionContextKey).(Session)
+		sid := session.SessionID
+		w.Write([]byte(sid))
+	})
 }
