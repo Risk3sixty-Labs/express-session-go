@@ -3,9 +3,9 @@ package store
 // BaseStore contains the required methods of
 // any created session store
 type BaseStore interface {
-	Destroy(sid string) error              // delete a session from the store
-	Get(sid string) (interface{}, error)   // get a session from the store
-	Set(sid string, val interface{}) error // set values for a session in the store
+	Destroy(sid string) error                         // delete a session from the store
+	Get(sid string) (interface{}, error)              // get a session from the store
+	Set(sid string, val map[string]interface{}) error // set values for a session in the store
 }
 
 // ExtendedStore contains additional methods

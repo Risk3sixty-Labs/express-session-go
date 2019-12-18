@@ -16,7 +16,7 @@ func (store *MemoryStore) Get(sid string) (interface{}, error) {
 }
 
 // Set sets a session with a given value
-func (store *MemoryStore) Set(sid string, v interface{}) error {
+func (store *MemoryStore) Set(sid string, v map[string]interface{}) error {
 	(*store)[sid] = v
 	return nil
 }

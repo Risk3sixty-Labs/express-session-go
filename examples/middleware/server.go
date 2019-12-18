@@ -8,14 +8,15 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	sid, _ := r.Context().Value(m.SessionContextKey).(string)
+	session, _ := r.Context().Value(m.SessionContextKey).(m.Session)
+	sid := session.SessionID
 	w.Write([]byte("Session ID: " + sid))
 }
 
 func main() {
-	final := m.ExpressSessionMiddleware("sid", "r3stesting123", func(sessionID string) interface{} {
-		return sessionID
-	}, http.HandlerFunc(handler))
+	m.SetCookieKey("sid")
+	m.SetCookieSecret("r3stesting123")
+	final := m.ExpressSessionMiddleware(http.HandlerFunc(handler))
 
 	http.Handle("/", final)
 	err := http.ListenAndServe(":8080", nil)
