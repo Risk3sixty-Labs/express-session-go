@@ -4,18 +4,19 @@ import (
 	"log"
 	"net/http"
 
-	m "github.com/Risk3sixty-Labs/express-session-go/middleware"
+	m "github.com/whatl3y/express-session-go/middleware"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	session, _ := r.Context().Value(m.SessionContextKey).(m.Session)
 	sid := session.SessionID
+	// session.SessionData contains all session info
 	w.Write([]byte("Session ID: " + sid))
 }
 
 func main() {
 	m.SetCookieKey("sid")
-	m.SetCookieSecret("r3stesting123")
+	m.SetCookieSecret("mySecretWhileT3sting123")
 	final := m.ExpressSessionMiddleware(http.HandlerFunc(handler))
 
 	http.Handle("/", final)

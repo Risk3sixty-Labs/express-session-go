@@ -4,15 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	c "github.com/Risk3sixty-Labs/express-session-go/cookie"
-	s "github.com/Risk3sixty-Labs/express-session-go/store"
+	c "github.com/whatl3y/express-session-go/cookie"
+	s "github.com/whatl3y/express-session-go/store"
 )
 
 type contextKey string
 
-// Session is the struct that stores all relavant
-// session data that a user can access via a request
-// context
+// Session is the struct that stores all relavant session data
+// that a user can access via a request context
 type Session struct {
 	SessionID    string
 	SessionData  interface{}

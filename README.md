@@ -1,19 +1,19 @@
 # express-session-go
 
-Functions and HTTP middleware to check validity and retrieve session information 
-that was populated from [express-session](https://github.com/expressjs/session).
+Functions and HTTP middleware to check validity and retrieve session information that was populated from [express-session](https://github.com/expressjs/session).
 
 ## Why
 
-At [risk3sixty](https://risk3sixty.com/) our primary web application authenticates and
-persists session data using [Passport](https://github.com/jaredhanson/passport) and [express-session](https://github.com/expressjs/session).
-We are starting to build APIs and services using Go, so to prevent from
-rearchitecting the way we authenticate from day one we needed a way to
-authenticate users and populate session data in our Go services.
+If you use [express-session](https://github.com/expressjs/session) in a NodeJS/express app to store session data, it's fine and dandy if all your APIs and services live in the same express app with all requests flowing through the express-session middleware. With this package, you can also build APIs and services in go and implement a similar HTTP middleware to retrieve and use session info as is being used in your express app.
 
 ## Usage
 
 See `/examples` folder
+
+## Stores
+
+- [memory store](https://github.com/whatl3y/express-session-go/blob/master/store/memory.go) is the default store, same as [express-session](https://github.com/expressjs/session) (note: should [not be used](https://github.com/expressjs/session#sessionoptions) in production)
+- [redis store](https://github.com/Risk3sixty-Labs/express-redis), same implementation as [connect-redis](https://github.com/tj/connect-redis) in NodeJS
 
 ## TODO
 
