@@ -66,7 +66,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		cookie, err := r.Cookie(mOptions.CookieKey)
 		if err != nil {
 			next.ServeHTTP(w, r)
-			log.Print("Error getting cookie", err)
+			log.Print("Error getting cookie: ", err)
 			return
 		}
 
@@ -74,7 +74,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		sessionID, err := cookieValue.CheckAndGetSession(mOptions.CookieSecret)
 		if err != nil {
 			next.ServeHTTP(w, r)
-			log.Print("Error getting session ID", err)
+			log.Print("Error getting session ID: ", err)
 			return
 		}
 
@@ -82,7 +82,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		parsedSession, err := parser(sessionID)
 		if err != nil {
 			next.ServeHTTP(w, r)
-			log.Print("Error getting parsed session", err)
+			log.Print("Error getting parsed session: ", err)
 			return
 		}
 
