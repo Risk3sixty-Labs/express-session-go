@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"log"
 	"net/http"
 
 	c "github.com/whatl3y/express-session-go/cookie"
@@ -28,6 +29,7 @@ const SessionContextKey contextKey = "session"
 var mOptions struct {
 	CookieKey    string
 	CookieSecret string
+	Logger       *log.Logger
 	Store        s.BaseStore
 }
 
@@ -39,6 +41,11 @@ func SetCookieKey(key string) {
 // SetCookieSecret sets the cookie secret for the signature
 func SetCookieSecret(secret string) {
 	mOptions.CookieSecret = secret
+}
+
+// SetLogger sets the logger to log info while parsing the session
+func SetLogger(logger *log.Logger) {
+	mOptions.Logger = logger
 }
 
 // SetStore sets the session store
@@ -59,6 +66,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		cookie, err := r.Cookie(mOptions.CookieKey)
 		if err != nil {
 			next.ServeHTTP(w, r)
+			log.Print("Error getting cookie", err)
 			return
 		}
 
@@ -66,6 +74,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		sessionID, err := cookieValue.CheckAndGetSession(mOptions.CookieSecret)
 		if err != nil {
 			next.ServeHTTP(w, r)
+			log.Print("Error getting session ID", err)
 			return
 		}
 
@@ -73,6 +82,7 @@ func ExpressSessionMiddleware(next http.Handler) http.Handler {
 		parsedSession, err := parser(sessionID)
 		if err != nil {
 			next.ServeHTTP(w, r)
+			log.Print("Error getting parsed session", err)
 			return
 		}
 
